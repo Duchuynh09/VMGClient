@@ -25,8 +25,8 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
 };
 
 export const columns = [
-    { name: "Tên công đoạn", accessKey: "stageName",sortable: true},
-    { name: "Thời gian", accessKey: "timeWork",sortable: true },
+    { name: "Tên công đoạn", accessKey: "stageName", sortable: true },
+    { name: "Thời gian", accessKey: "timeWork", sortable: true },
     { name: "Giá thời gian", accessKey: "unitPriceSecond" },
     { name: "Giá thời thực tế", accessKey: "unitPriceMain" },
     { name: "Hành động", accessKey: "actions" },
@@ -212,38 +212,41 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 };
 
 export default function TableStage({ stages }: Props) {
-    const [sortDescriptor, setSortDescriptor] =useState<SortDescriptor>({
+    const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: 'stageName',
         direction: 'ascending' as 'ascending' | 'descending',
-      });
-      
+    });
+
     //   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     //     setStage({ ...stage, [e.target.name]: e.target.value });
     //   };
+    const totalTime = stages.reduce((sum, stage) => sum + (stage.timeWork ?? 0), 0);
+    const totalMainPrice = stages.reduce((sum, stage) => sum + (stage.unitPriceMain ?? 0), 0);
+    const totalSecondPrice = stages.reduce((sum, stage) => sum + (stage.unitPriceSecond ?? 0), 0);
     const sortedStages = React.useMemo(() => {
         return [...stages].sort((a, b) => {
-          const key = sortDescriptor.column as keyof Stage;
-          const aVal = a[key];
-          const bVal = b[key];
-      
-          if (typeof aVal === 'number' && typeof bVal === 'number') {
-            return sortDescriptor.direction === 'ascending' ? aVal - bVal : bVal - aVal;
-          }
-      
-          if (typeof aVal === 'string' && typeof bVal === 'string') {
-            return sortDescriptor.direction === 'ascending'
-              ? aVal.localeCompare(bVal)
-              : bVal.localeCompare(aVal);
-          }
-      
-          return 0;
+            const key = sortDescriptor.column as keyof Stage;
+            const aVal = a[key];
+            const bVal = b[key];
+
+            if (typeof aVal === 'number' && typeof bVal === 'number') {
+                return sortDescriptor.direction === 'ascending' ? aVal - bVal : bVal - aVal;
+            }
+
+            if (typeof aVal === 'string' && typeof bVal === 'string') {
+                return sortDescriptor.direction === 'ascending'
+                    ? aVal.localeCompare(bVal)
+                    : bVal.localeCompare(aVal);
+            }
+
+            return 0;
         });
-      }, [stages, sortDescriptor]);
+    }, [stages, sortDescriptor]);
     const renderCell = React.useCallback((stage: Stage, columnKey: React.Key) => {
         const cellValue = stage[columnKey as keyof Stage];
         switch (columnKey) {
-            case "stt": 
-                return 
+            case "stt":
+                return
             case "stageName":
                 return typeof cellValue === 'object' ? JSON.stringify(cellValue) : cellValue ?? '';;
             case "timeWork":
@@ -274,7 +277,7 @@ export default function TableStage({ stages }: Props) {
 
     return (
         <Table aria-label="Example table with custom cells"
-        sortDescriptor={sortDescriptor}
+            sortDescriptor={sortDescriptor}
             onSortChange={setSortDescriptor}
         >
             <TableHeader columns={columns}>
@@ -285,11 +288,12 @@ export default function TableStage({ stages }: Props) {
                 )}
             </TableHeader>
             <TableBody items={sortedStages}>
-                {(item) => (
-                    <TableRow key={item.stageID}>
+                {(item) => {
+                    return (<TableRow key={item.stageID}>
                         {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-                    </TableRow>
-                )}
+                    </TableRow>)
+                }     
+                }
             </TableBody>
         </Table>
     );

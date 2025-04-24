@@ -2,8 +2,8 @@
 import { useEffect, useState } from 'react';
 import { Stage, Product } from '@/types';
 import {
-    createStage,
-    deleteStage,
+  createStage,
+  deleteStage,
   getProcessByProduct,
   updateStage
 } from '@/lib/api';
@@ -22,12 +22,16 @@ export default function StagePage() {
   const fetchData = async () => {
     try {
       const s = await getProcessByProduct('d14b5655cab66f625dffd1b1bf50c82d')
+      setProducts(s[0].Products)
       setStages(s);
-    } catch (error) {
       
+    } catch (error) {
+
     }
   };
-
+  const totalTime = stages.reduce((sum, stage) => sum + (stage.timeWork ?? 0), 0);
+  const totalMainPrice = stages.reduce((sum, stage) => sum + (stage.unitPriceMain ?? 0), 0);
+  const totalSecondPrice = stages.reduce((sum, stage) => sum + (stage.unitPriceSecond ?? 0), 0);
   const handleDelete = async (id: string) => {
     await deleteStage(id);
     fetchData();
@@ -52,9 +56,19 @@ export default function StagePage() {
     s.Product?.style.toLowerCase().includes(search.toLowerCase())
   );
 
-//   const handleViewProcess = async (style: string, customer: string) => {
-//     const result = await getProcessByProduct();
-//     console.log('Process:', result);
-//   };
-  return <TableStage stages={filtered} ></TableStage> 
+  //   const handleViewProcess = async (style: string, customer: string) => {
+  //     const result = await getProcessByProduct();
+  //     console.log('Process:', result);
+  //   };
+  return (
+    <div className="p-6">
+      {stages.length > 0 && (
+        <h1 className="text-xl font-bold mb-4">
+        <span className="text-gray-600">Sản phẩm:</span> {stages[0]?.Product?.style}{" "}
+        | <span className="text-gray-600">Khách hàng:</span> {stages[0]?.Product?.customer}{" "}
+        | <span className="text-gray-600">Phòng ban:</span> {stages[0]?.Department?.DepartmentName}
+      </h1>
+      )}
+      <TableStage stages={filtered} ></TableStage>
+    </div>)
 }

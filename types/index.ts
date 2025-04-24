@@ -28,7 +28,7 @@ export interface Stage {
     customer: string;
   };
   Department: {
-    departmentName: string;
+    DepartmentName: string;
   }
 }
 
