@@ -18,7 +18,7 @@ export default function LoginPage() {
   };
   return (
     <div>
-      <h1 className={title()}>Form</h1>
+      <h1 className={title()}>Đăng nhập</h1>
       <Form
         className="w-full max-w-xs flex felx-col gap-4"
         onReset={() => setAction("reset")}
