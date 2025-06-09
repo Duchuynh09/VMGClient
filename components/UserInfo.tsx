@@ -1,40 +1,19 @@
-'use client'
-import { title } from "@/components/primitives";
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger,Avatar,Button } from "@heroui/react";
+import { Dropdown, DropdownTrigger,DropdownItem,DropdownMenu } from "@heroui/dropdown"
+import { User } from "@heroui/react"
 
-export default function BlogPage() {
-  const items = [
-    {
-      key: "new",
-      label: "New file",
-    },
-    {
-      key: "copy",
-      label: "Copy link",
-    },
-    {
-      key: "edit",
-      label: "Edit file",
-    },
-    {
-      key: "delete",
-      label: "Delete file",
-    },
-  ];
-  return (
-    <div>
-      <h1 className={title()}>Blog</h1>
-      <Dropdown placement="bottom-end">
+export default function UserInfo(){
+    return (  <Dropdown placement="bottom-end">
           <DropdownTrigger>
-            <Avatar
-              isBordered
-              as="button"
-              className="transition-transform"
-              color="secondary"
-              name="Jason Hughes"
-              size="sm"
-              src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-            />
+           <User
+            as="button"
+            avatarProps={{
+              isBordered: true,
+              src: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
+            }}
+            className="transition-transform"
+            description="@tonyreichert"
+            name="Tony Reichert"
+          />
           </DropdownTrigger>
           <>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
@@ -53,7 +32,5 @@ export default function BlogPage() {
             </DropdownItem>
           </DropdownMenu>
           </>
-        </Dropdown>
-    </div>
-  );
+        </Dropdown>)
 }
